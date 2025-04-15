@@ -31,3 +31,7 @@ def hp_tune():
   
   with open('params.pkl', 'wb') as file:
     pickle.dump(trial.params, file)
+
+
+if __name__ == "__main__":
+    hp_tune()
