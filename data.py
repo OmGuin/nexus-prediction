@@ -3,10 +3,10 @@ from sklearn.model_selection import train_test_split
 
 
 def load_data():
-  data = pd.read_csv('')
+  data = pd.read_csv('diabetes.csv')
 
-  X = data.drop(columns = ['IRScore'])
-  y = data['IRScore']
+  X = data.drop(columns = ['Outcome'])
+  y = data['Outcome']
 
   X_train, X_test, y_train, y_test = train_test_split(X,y, test_size = 0.2, random_state = 42)
   
