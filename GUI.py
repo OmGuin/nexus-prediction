@@ -5,7 +5,7 @@ import joblib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from feature_importance import getGraph
-import numpy as np
+from PIL import Image, ImageTk
 
 model = joblib.load('trained_xgb.pkl')  
 
@@ -49,7 +49,7 @@ def predict_irscore():
 
         df = pd.DataFrame([input_data], columns = full_features)
         prediction = model.predict(df)[0]
-        result_var.set(f"Predicted IR Score: {prediction:.2f}")
+        result_var.set(f"Predicted IR Score:\n {prediction:.2f}")
         display_shap_plot(input_data)
     except ValueError as ve:
         messagebox.showerror("Input Error", str(ve))
@@ -60,8 +60,7 @@ def predict_irscore():
 root = tk.Tk()
 root.configure(bg="#ede7f6")
 root.title("Insulin Resistance Score Predictor")
-
-
+root.geometry("1300x600")
 
 style = ttk.Style()
 style.theme_use("clam")
@@ -84,9 +83,9 @@ for i, feature in enumerate(FORMAL_FEATURES):
     entries[FEATURES[i]] = entry
 
 # Predict Button and Result
-ttk.Button(left_frame, text="Predict IR Score", command=predict_irscore).grid(row=len(FEATURES), column=0, columnspan=2, pady=10)
-result_var = tk.StringVar(value="Predicted IR Score will appear here.")
-ttk.Label(left_frame, textvariable=result_var, foreground="#333", font=("Segoe UI", 16, "bold")).grid(row=len(FEATURES)+1, column=0, columnspan=2, pady=5)
+ttk.Button(left_frame, text="Predict IR Score", command=predict_irscore).grid(row=len(FEATURES), column=0, columnspan=2, pady=15)
+result_var = tk.StringVar(value="Predicted IR Score \nwill appear here.")
+ttk.Label(left_frame, textvariable=result_var, foreground="#333", font=("Segoe UI", 20, "bold")).grid(row=len(FEATURES)+1, column=0, columnspan=2, pady=20)
 
 
 right_frame = ttk.Frame(root, padding=20)
@@ -95,8 +94,15 @@ right_frame.grid(row=0, column=1, sticky="nsew")
 
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
-fig = plt.Figure(figsize=(8, 4), dpi=100)
+fig = plt.Figure(figsize=(8, 5.5), dpi=100)
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
 canvas.get_tk_widget().pack()
 canvas.draw()
+
+def on_closing():
+    root.quit() 
+    root.destroy() 
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
+
 root.mainloop()
