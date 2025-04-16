@@ -36,17 +36,14 @@ def optimize_score(inputs):
       x0=initial_tunable_inputs,
       args=(fixed_inputs,),
       bounds=bounds,
-      method='L-BFGS-B'  # A good choice for bounded problems
+      method='L-BFGS-B'
   )
   
   # Optimized inputs
   optimized_tunable_inputs = result.x
   print("Optimized Tunable Inputs:", optimized_tunable_inputs)
-  
-  final_irscore = irscore_model([fixed_inputs['age']] + list(optimized_tunable_inputs))
-  print("Final IRscore:", final_irscore)
-    
-  
-  
-  
+
+
+  optimized_score = objective_function(optimized_tunable_inputs, fixed_inputs)
+  return optimized_score, optimized_tunable_inputs
   
