@@ -10,20 +10,21 @@ with open("trained_xgb.pkl", "rb") as file:
   model = pickle.load(file)
 
 def objective_function(tunable_inputs, fixed_inputs):
+  print(fixed_inputs)
+  print(tunable_inputs)
   bp, st, insulin, dpf, age = fixed_inputs
   glucose, bmi = tunable_inputs 
-  
-  inputs = [glucose, bp, st, insulin, bmi, dpf, age]
-  df = pd.DataFrame([inputs])
-  df.astype(float)
+  inputs = [0, glucose, bp, st, insulin, bmi, dpf, age]
+  print(inputs)
+  df = pd.DataFrame([inputs], columns = FEATURES)
   return model.predict(df)[0]
 
 
 def optimize_score(inputs):
-  fixed_inputs = dict()
+  fixed_inputs = []
   for key, value in inputs.items():
      if key in Config.nontunable_features:
-        fixed_inputs[key] = value
+        fixed_inputs.append(value)
 
   # x0
   initial_tunable_inputs = [inputs['Glucose'], inputs['BMI']]
