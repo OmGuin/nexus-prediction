@@ -5,12 +5,13 @@ import joblib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from feature_importance import getGraph
-from PIL import Image, ImageTk
+#from optimize import optimize_score
+from config import Config
 
 model = joblib.load('trained_xgb.pkl')  
 
-FEATURES = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI", "DiabetesPedigreeFunction", "Age"]
-FORMAL_FEATURES = ["Glucose", "Blood Pressure", "Skin Thickness", "Insulin", "BMI", "Diabetes Pedigree\nFunction", "Age"]
+FEATURES = Config.FEATURES
+FORMAL_FEATURES = Config.FORMAL_FEATURES
 canvas = None
 
 bg_color = "#ede7f6"        # light purple background
