@@ -1,6 +1,7 @@
 import torch
 
 CSV_PATH = "data.csv"
+FEATURES = []
 
 BATCH_SIZE = 32
 EPOCHS = 100
