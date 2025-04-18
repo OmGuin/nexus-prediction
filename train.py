@@ -1,21 +1,22 @@
-import pandas as pd
-import xgboost as xgb
-from data import load_data
-import pickle
-with open("params.pkl", "rb") as file:
-  params = pickle.load(file)
+import torch
+from config import DEVICE
 
-X_train, X_test, y_train, y_test = load_data()
+def train(model, loader, optimizer, criterion, epoch):
+    model.train()
+    running_loss = 0.0
 
-#model = xgb.XGBRegressor(**params)
+    for batch_idx, (X, y) in enumerate(loader):
+        X, y = X.to(DEVICE), y.to(DEVICE)
 
-#X_train, X_test, y_train, y_test = load_data()
-dtrain = xgb.DMatrix(X_train, label = y_train)
-dtest = xgb.DMatrix(X_test, label=y_test)
+        optimizer.zero_grad()
+        output = model(X)
+        loss = criterion(output, y)
+        loss.backward()
+        optimizer.step()
 
-#xgb_model = xgb.train(params, dtrain, num_boost_round=params['n_estimators'])
+        running_loss += loss.item()
 
-
-
-with open("trained_xgb.pkl", "wb") as file:
-  pickle.dump(reg, file)
+        if batch_idx % 10 == 0:
+            print(f"Epoch {epoch}, Batch {batch_idx}, Loss: {loss.item():.6f}")
+    
+    return running_loss / len(loader)
