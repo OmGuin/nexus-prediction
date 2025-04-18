@@ -4,6 +4,7 @@ class Config:
   tunable_features = ["Glucose", "BMI"]
   nontunable_features = ["BloodPressure", "SkinThickness", "Insulin", "DiabetesPedigreeFunction", "Age"]
   bounds = [(80, 130), (18, 40)]
+  FULL_FEATURES = ["Pregnancies"] + FEATURES
 
     
     

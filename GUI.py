@@ -46,7 +46,7 @@ def predict_irscore():
             input_data.append(float(value))
 
 
-        full_features = ["Pregnancies"] + FEATURES
+        full_features = Config.FULL_FEATURES
 
         df = pd.DataFrame([input_data], columns = full_features)
         prediction = model.predict(df)[0]

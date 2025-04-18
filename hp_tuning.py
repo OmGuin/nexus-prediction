@@ -16,7 +16,7 @@ def objective(trial):
         'tree_method': 'hist',
         'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.3),
         'max_depth': trial.suggest_int('max_depth', 3, 10),
-        'n_estimators': trial.suggest_int('n_estimators', 100, 1000, step=50),
+        'n_estimators': trial.suggest_int('n_estimators', 100, 1000, step=25),
         'subsample': trial.suggest_float('subsample', 0.5, 1.0),
         'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 1.0),
         'lambda': trial.suggest_float('lambda', 1e-8, 10.0, log=True),  # L2

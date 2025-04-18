@@ -6,6 +6,7 @@ from config import Config
 
 FEATURES = Config.FEATURES
 tunable_features = Config.tunable_features
+
 with open("trained_xgb.pkl", "rb") as file:
   model = pickle.load(file)
 
@@ -16,8 +17,11 @@ def objective_function(tunable_inputs, fixed_inputs):
   glucose, bmi = tunable_inputs 
   inputs = [0, glucose, bp, st, insulin, bmi, dpf, age]
   print(inputs)
-  df = pd.DataFrame([inputs], columns = FEATURES)
-  return model.predict(df)[0]
+  df = pd.DataFrame([inputs], columns = ['Pregnancies'] + FEATURES)
+  x = model.predict(df)[0]
+  print(x)
+  return x
+  #return model.predict(df)[0]
 
 
 def optimize_score(inputs):
@@ -41,12 +45,11 @@ def optimize_score(inputs):
   
   # Optimized inputs
   optimized_tunable_inputs = result.x
-  print("Optimized Tunable Inputs:", optimized_tunable_inputs)
+  print(result.x)
 
-
-  optimized_score = objective_function(optimized_tunable_inputs, fixed_inputs)
-  return optimized_score, optimized_tunable_inputs
+  #optimized_score = objective_function(optimized_tunable_inputs, fixed_inputs)
+  #return optimized_score, optimized_tunable_inputs
   
 
-
-print(optimize_score(dict(Glucose = 96, BloodPressure=122, SkinThickness=30, Insulin=100, BMI=22, DiabetesPedigreeFunction=0.3, Age=42)))
+optimize_score(dict(Glucose = 96, BloodPressure=122, SkinThickness=30, Insulin=100, BMI=22, DiabetesPedigreeFunction=0.3, Age=42))
+#print(optimize_score(dict(Glucose = 96, BloodPressure=122, SkinThickness=30, Insulin=100, BMI=22, DiabetesPedigreeFunction=0.3, Age=42)))
