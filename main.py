@@ -18,6 +18,11 @@ def main():
         print(f"Epoch {epoch} - Training Loss: {train_loss:.6f}")
         test(model, test_loader, criterion)
     torch.save(model.state_dict(), "IR_model.pth")
+    dummy_input = torch.randn(1, 8).to(DEVICE)
+    torch.onnx.export(model, dummy_input, "IR_model.onnx",
+                      input_names=["input"], output_names=["output"],
+                      dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
+                      opset_version=11)
 
 
 if __name__ == "__main__":
