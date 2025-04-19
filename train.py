@@ -16,7 +16,7 @@ def train(model, loader, optimizer, criterion, epoch):
 
         running_loss += loss.item()
 
-        if batch_idx % 10 == 0:
+        if batch_idx % 100 == 0:
             print(f"Epoch {epoch}, Batch {batch_idx}, Loss: {loss.item():.6f}")
     
     return running_loss / len(loader)
