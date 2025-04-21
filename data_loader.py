@@ -1,18 +1,23 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import pandas as pd
 from config import CSV_PATH, BATCH_SIZE
 
 class IRDataset(Dataset):
     def __init__(self, csv_path):
         data = pd.read_csv(csv_path)
-        
-        self.scaler_X = StandardScaler()
-        self.X_scaled = self.scaler_X.fit_transform(data.iloc[:, :-1].values).astype('float32')
 
-        self.X = torch.tensor(self.X_scaled, dtype=torch.float32)
+        # self.scaler_X = StandardScaler()
+        # self.X_scaled = self.scaler_X.fit_transform(data.iloc[:, :-1].values).astype('float32')
+
+
+        # self.scaler_y = MinMaxScaler()
+        # self.Y_scaled = self.scaler_y.fit_transform(data.iloc[:, -1].values.reshape(-1, 1)).astype('float32')
+
+        self.X = torch.tensor(data.iloc[:, :-1].values, dtype=torch.float32)
         self.Y = torch.tensor(data.iloc[:, -1].values, dtype=torch.float32).unsqueeze(1)
+
 
     def __len__(self):
         return len(self.X)

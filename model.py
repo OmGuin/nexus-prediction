@@ -42,5 +42,14 @@ class IRPredictor(nn.Module):
             nn.Identity()
         )
 
+        self.net5 = nn.Sequential(
+            nn.Linear(input_dim, 32),
+            nn.ReLU(),
+            nn.Linear(32, 16),
+            nn.ReLU(),
+            nn.Linear(16, 1),
+            nn.Sigmoid()
+        )
+
     def forward(self, x):
         return self.net3(x)
