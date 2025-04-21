@@ -1,6 +1,21 @@
 import torch.nn as nn
 from config import FEATURES
 
+
+
+class MLP(nn.Module):
+    def __init__(self, in_chn, out_chn):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(in_chn, in_chn*4),
+            nn.ReLU(),
+            nn.Linear(in_chn*4, out_chn),
+        )
+
+    def forward(self, x):
+        return self.net(x)
+    
+
 class IRPredictor(nn.Module):
     def __init__(self, input_dim = len(FEATURES)):
         super(IRPredictor, self).__init__()
@@ -40,6 +55,20 @@ class IRPredictor(nn.Module):
 
             nn.Linear(16, 1),
             nn.Identity()
+        
+        )
+
+
+        self.david = nn.Sequential(
+            nn.Linear(input_dim, 64),
+            nn.ReLU(),
+            nn.Linear(64, 128),
+            nn.ReLU(),
+            nn.Linear(128, 256),
+            nn.ReLU(),
+            nn.Linear(256, 32),
+            nn.ReLU(),
+            nn.Linear(32, 1),
         )
 
         self.net5 = nn.Sequential(
@@ -52,4 +81,4 @@ class IRPredictor(nn.Module):
         )
 
     def forward(self, x):
-        return self.net3(x)
+        return self.david(x)

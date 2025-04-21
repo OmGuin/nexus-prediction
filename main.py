@@ -25,6 +25,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import matplotlib.pyplot as plt
+
 def plot_loss(train_losses, test_losses, r2s):
                         plt.figure(figsize=(10, 5))
                         plt.plot(train_losses, label="Train Loss")
@@ -36,6 +37,7 @@ def plot_loss(train_losses, test_losses, r2s):
                         plt.legend()
                         plt.grid(True)
                         plt.show()
+                        
 def main():
     train_loader, test_loader = get_loaders()
     train_losses = []
