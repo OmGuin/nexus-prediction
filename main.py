@@ -37,7 +37,7 @@ def plot_loss(train_losses, test_losses, r2s):
                         plt.legend()
                         plt.grid(True)
                         plt.show()
-                        
+
 def main():
     train_loader, test_loader = get_loaders()
     train_losses = []

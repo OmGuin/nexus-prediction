@@ -8,8 +8,12 @@ def train(model, loader, optimizer, criterion, epoch):
     for batch_idx, (X, y) in enumerate(loader):
         X, y = X.to(DEVICE), y.to(DEVICE)
 
+        #print(y)
+
         optimizer.zero_grad()
         output = model(X)
+
+        #print(output)
         loss = criterion(output, y)
         loss.backward()
         optimizer.step()

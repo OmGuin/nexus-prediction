@@ -69,6 +69,20 @@ class IRPredictor(nn.Module):
             nn.Linear(256, 32),
             nn.ReLU(),
             nn.Linear(32, 1),
+            nn.Softmax(dim=1)
+        )
+
+        self.PranavNet = nn.Sequential(
+            nn.Linear(input_dim, 8),
+            nn.ReLU(),
+            nn.Linear(8, 16),
+            nn.ReLU(),
+            nn.Linear(16, 16),
+            nn.ReLU(),
+            nn.Linear(16, 8),
+            nn.ReLU(),
+            nn.Linear(8, 1),
+            nn.Softmax(dim=1)
         )
 
         self.net5 = nn.Sequential(
@@ -81,4 +95,4 @@ class IRPredictor(nn.Module):
         )
 
     def forward(self, x):
-        return self.david(x)
+        return self.PranavNet(x)
