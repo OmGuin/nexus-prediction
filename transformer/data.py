@@ -4,11 +4,12 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 from config import Config
-
+import numpy as np
 
 
 class HOMAIRDataset(Dataset):
     def __init__(self, X, y):
+        self.X = np.log1p(X)
         self.X = torch.tensor(X, dtype=torch.float32)
         self.Y = torch.tensor(y, dtype=torch.float32).flatten()
         
@@ -17,7 +18,7 @@ class HOMAIRDataset(Dataset):
     
     def __getitem__(self, idx):
         return self.X[idx], self.Y[idx]
-    
+
 def get_loaders():
     dataset = HOMAIRDataset('subsample.csv')
     train_size = int(0.8 * len(dataset))
