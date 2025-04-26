@@ -105,3 +105,35 @@ class GFTNet(nn.Module):
         x = x.mean(dim=1)              # Pool over feature tokens
         out = self.regressor(x)        # → [batch_size, 1]
         return out.squeeze(1)
+
+
+class SmallTabTransformer(nn.Module):
+    def __init__(self, input_dim, d_model=16, nhead=2, num_layers=2, dropout=0.3):
+        super().__init__()
+        # Feature projection
+        self.proj = nn.Linear(input_dim, d_model)
+        
+        # Transformer
+        self.transformer = nn.TransformerEncoder(
+            nn.TransformerEncoderLayer(
+                d_model=d_model,
+                nhead=nhead,
+                dim_feedforward=32,
+                dropout=dropout,
+                batch_first=True
+            ),
+            num_layers=num_layers
+        )
+        
+        # Regression head
+        self.head = nn.Sequential(
+            nn.Linear(d_model, 8),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(8, 1)
+        )
+    
+    def forward(self, x):
+        x = self.proj(x).unsqueeze(1)  # [batch, 1, d_model]
+        x = self.transformer(x)
+        return self.head(x.squeeze(1)).squeeze(-1)

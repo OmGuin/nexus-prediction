@@ -9,9 +9,10 @@ import numpy as np
 
 class HOMAIRDataset(Dataset):
     def __init__(self, X, y):
-        self.X = np.log1p(X)
         self.X = torch.tensor(X, dtype=torch.float32)
         self.Y = torch.tensor(y, dtype=torch.float32).flatten()
+        print("Input X type:", type(X))
+        print("Input y type:", type(y))
         
     def __len__(self):
         return len(self.X)
@@ -20,7 +21,7 @@ class HOMAIRDataset(Dataset):
         return self.X[idx], self.Y[idx]
 
 def get_loaders():
-    dataset = HOMAIRDataset('subsample.csv')
+    dataset = HOMAIRDataset('stuff.csv')
     train_size = int(0.8 * len(dataset))
     test_size = len(dataset) - train_size
     train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
