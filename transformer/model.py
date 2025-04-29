@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 class TransformerRegression2(nn.Module):
@@ -12,7 +13,6 @@ class TransformerRegression2(nn.Module):
             nn.Linear(d_model, d_model),
             nn.ReLU(),
             nn.Linear(d_model, 1),
-            nn.Sigmoid()
         )
 
     def forward(self, x):
@@ -22,12 +22,52 @@ class TransformerRegression2(nn.Module):
         x = x.mean(dim=1)
         return self.output_layer(x).squeeze(-1)
 
+class BetterGFT(nn.Module):
+    def __init__(self, input_dim, d_model=64, nhead=4, num_layers=2, dropout=0.1):
+        self.input_dim = input_dim
+        self.d_model = d_model
+        super().__init__()
+        self.feature_embed = nn.Sequential(
+            nn.Linear(1, d_model),
+            nn.ReLU(),
+            nn.Linear(d_model, d_model),
+        )
+        self.feature_positional_encoding = nn.Parameter(torch.randn(1, input_dim, d_model))
+
+
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=nhead,
+            dim_feedforward=512,
+            dropout=dropout,
+            batch_first=True
+        )
+
+        self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers, dropout=0.1)
+
+        self.regressor = nn.Sequential(
+            nn.LayerNorm(d_model),
+            nn.Linear(d_model, d_model//2),
+            nn.SiLU(),
+            nn.Dropout(dropout/2),
+            nn.Linear(d_model//2, 1)
+        )
+    
+    def forward(self, x):
+        x = x.unsqueeze(-1)  # [batch_size, input_dim, 1]
+        x = self.feature_embed(x)
+        x = x + self.feature_positional_encoding
+        x = self.encoder(x)
+        x = x.mean(dim=1)  # Pool over feature tokens
+        out = self.regressor(x).squeeze(-1)  # [batch_size, 1]
+        return out
 
 
 
 class GFTNetX(nn.Module):
     def __init__(self, input_dim, d_model=64, nhead=4, num_layers=3, dropout=0.2):
         super().__init__()
+        
         self.input_proj = nn.Sequential(
             nn.Linear(input_dim, d_model),
             nn.LayerNorm(d_model),
@@ -94,7 +134,6 @@ class GFTNet(nn.Module):
             nn.Linear(d_model, d_model // 2),
             nn.ReLU(),
             nn.Linear(d_model // 2, 1),
-            nn.Sigmoid()
         )
 
     def forward(self, x):
