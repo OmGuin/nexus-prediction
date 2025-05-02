@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 
 
 def load_data():
-  data = pd.read_csv('diabetes.csv')
+  data = pd.read_csv('xgb/diabetes.csv')
 
   X = data.drop(columns = ['Outcome'])
   y = data['Outcome']

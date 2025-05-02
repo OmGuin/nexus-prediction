@@ -10,7 +10,7 @@ def getGraph(input):
     features = ['Pregnancies', 'Glucose', 'Blood Pressure', 'Skin Thickness', 'Insulin',
        'BMI', 'Diabetes \nPedigree \nFunction', 'Age']
     input_df = pd.DataFrame([input], columns = features)
-    with open('trained_xgb.pkl', 'rb') as file:
+    with open('xgb/trained_xgb.pkl', 'rb') as file:
         model = pickle.load(file)
 
     explainer = shap.Explainer(model, X_train)

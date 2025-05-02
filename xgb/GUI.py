@@ -8,7 +8,7 @@ from feature_importance import getGraph
 #from optimize import optimize_score
 from config import Config
 
-model = joblib.load('trained_xgb.pkl')  
+model = joblib.load('xgb/trained_xgb.pkl')  
 
 FEATURES = Config.FEATURES
 FORMAL_FEATURES = Config.FORMAL_FEATURES
