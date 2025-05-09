@@ -44,6 +44,17 @@ css = '''
 st.markdown(css, unsafe_allow_html=True)
 st.markdown("""
 <style>
+.fade-in-recs {
+animation: fadeInRecs 1.2s ease-out;
+opacity: 0;
+animation-fill-mode: forwards;
+}
+
+@keyframes fadeInRecs {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
 body {
     background-color: #fdfcfa;
 }
@@ -103,7 +114,16 @@ if not st.session_state.logged_in:
     st.stop()
 
 # ------------------------ Tabs ------------------------ #
-tab1, tab2, tab3 = st.tabs(["Home", "Trajectory", "Recommendations"])
+tabs = st.tabs(["Home", "Trajectory", "Recommendations"])
+
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "Home"
+tab1, tab2, tab3 = tabs
+tab_names = ["Home", "Trajectory", "Recommendations"]
+for i, tab in enumerate(tabs):
+    with tab:
+        if st.session_state.active_tab != tab_names[i]:
+            st.session_state.active_tab = tab_names[i]
 
 # ------------------------ Home Tab ------------------------ #
 with tab1:
@@ -165,7 +185,7 @@ with tab1:
 
 # ------------------------ Trajectory Tab ------------------------ #
 with tab2:
-    st.markdown("<h1 style='text-align: center; color: #2d3436;'>Trajectory Panel</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #2d3436;'>Your IRScore Forecast</h1>", unsafe_allow_html=True)
 
     if "exercise_on" not in st.session_state:
         st.session_state.exercise_on = False
@@ -206,9 +226,11 @@ with tab3:
         ("Exercise", "Walk for 30 minutes/day", -5, "🏋️")
     ]
 
+    fade_class = "fade-in-recs" if st.session_state.active_tab == "Recommendations" else ""
+
     for title, desc, delta, icon in recs:
         st.markdown(f"""
-        <div style='background-color:#f4f3f8; padding: 1em; border-radius: 10px; margin-bottom: 1em;'>
+        <div class="{fade_class}" style='background-color:#f4f3f8; padding: 1em; border-radius: 10px; margin-bottom: 1em;'>
             <h4 style='color: #2d3436;'>{icon} {title}</h4>
             <p style='margin: 0;'>{desc}</p>
         </div>
