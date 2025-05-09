@@ -1,0 +1,8 @@
+[theme]
+base="light"
+primaryColor="#6c5ce7"
+backgroundColor="#fdfcfa"                # Soft off-white
+secondaryBackgroundColor="#f4f3f8"       # Gentle light gray/lavender
+textColor="#2d3436"
+font="sans serif"
+
