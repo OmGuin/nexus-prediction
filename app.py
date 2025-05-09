@@ -5,6 +5,33 @@ from matplotlib.patches import Arc
 import io
 import base64
 from inference import calculate_irscore
+import plotly.express as px
+import pandas as pd
+from streamlit_lottie import st_lottie
+import requests
+import plotly.graph_objects as go
+
+def draw_plotly_gauge(score):
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=score,
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': "IRScore"},
+        gauge={
+            'axis': {'range': [0, 100]},
+            'bar': {'color': "#6c5ce7"},
+            'steps': [
+                {'range': [0, 50], 'color': "#ffeaa7"},
+                {'range': [50, 75], 'color': "#fdcb6e"},
+                {'range': [75, 100], 'color': "#00b894"}
+            ],
+        }
+    ))
+    return fig
+
+def load_lottieurl(url):
+    r = requests.get(url)
+    return r.json() if r.status_code == 200 else None
 
 st.set_page_config(page_title="NexFlow", layout="centered", page_icon="💡")
 
@@ -140,6 +167,26 @@ with tab1:
             </div>
         </div>
         """, unsafe_allow_html=True)
+        st.markdown(f"""
+<div class='fade-in-gauge' style='display: flex; justify-content: space-around; margin-top: 2em;'>
+    <div style='text-align: center;'>
+        <p style='font-weight: bold;'>IRScore</p>
+        <p style='font-size: 24px;'>{int(score)}</p>
+        <p style='color: green;'>+2 from last week</p>
+    </div>
+    <div style='text-align: center;'>
+        <p style='font-weight: bold;'>BMI</p>
+        <p style='font-size: 24px;'>{bmi:.1f}</p>
+        <p style='color: green;'>+0.2 from last week</p>
+    </div>
+    <div style='text-align: center;'>
+        <p style='font-weight: bold;'>Weight</p>
+        <p style='font-size: 24px;'>{weight}</p>
+        <p style='color: green;'>+0.9 from last week</p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 
 # ------------------------ Trajectory Tab ------------------------ #
 with tab2:
@@ -163,10 +210,14 @@ with tab2:
         days = ["Today", "1w", "2w", "3w", "4w"]
         scores = [88, 87, 85, 82, 81]
 
-    fig, ax = plt.subplots()
-    ax.plot(days, scores, color="#2980b9", linewidth=3)
-    ax.set_ylim(60, 100)
-    st.pyplot(fig)
+    df = pd.DataFrame({'Week': days, 'Score': scores})
+    fig = px.line(df, x='Week', y='Score', title='Trajectory', markers=True)
+    st.plotly_chart(fig)
+
+    #fig, ax = plt.subplots()
+    #ax.plot(days, scores, color="#2980b9", linewidth=3)
+    #ax.set_ylim(60, 100)
+    #st.pyplot(fig)
 
 # ------------------------ Recommendations Tab ------------------------ #
 with tab3:
