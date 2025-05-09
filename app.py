@@ -150,12 +150,13 @@ with tab2:
 
     with st.container():
         c1, c2, c3 = st.columns(3)
-        c1_toggle = c1.toggle("Carbs")
-        c2_toggle = c2.toggle("Sleep")
-        exercise_toggle = c3.toggle("Exercise", value=st.session_state.exercise_on)
-        st.session_state.exercise_on = exercise_toggle
+        c1.toggle("Carbs", key="carbs_toggle")
+        c2.toggle("Sleep", key="sleep_toggle")
+        c3.toggle("Exercise", key="exercise_toggle")
 
-    if exercise_toggle:
+
+
+    if st.session_state.get("exercise_toggle", False):
         days = ["Today", "1w", "2w", "3w", "4w"]
         scores = [88, 89, 91, 92, 93]
     else:
