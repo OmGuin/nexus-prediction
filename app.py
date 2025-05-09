@@ -117,7 +117,7 @@ with tab1:
         weight = st.number_input("Body Weight (lbs)", min_value=150.0, max_value=600.0, step=1.0)
     with col2:
         gender_label = st.selectbox("Gender", ["Male", "Female"])
-        height = st.number_input("Height (inches)", min_value=60.0, max_value=96.0, step=0.5)
+        height = st.number_input("Height (inches)", min_value=65.0, max_value=96.0, step=1.0)
 
     gender = 1 if gender_label == "Male" else 0
     bmi = (weight / (height * height)) * 703 if height > 0 else 0
@@ -175,15 +175,16 @@ with tab2:
         c1.toggle("Carbs", key="carbs_toggle")
         c2.toggle("Sleep", key="sleep_toggle")
         c3.toggle("Exercise", key="exercise_toggle")
+    features = np.array([[age, gender, bmi, weight, height]])
+    score, _ = calculate_irscore(features)
 
-
-
+    score = int(score)
     if st.session_state.get("exercise_toggle", False):
         days = ["Today", "1w", "2w", "3w", "4w"]
-        scores = [88, 89, 91, 92, 93]
+        scores = [score, score+1, score+3, score+4, score+5]
     else:
         days = ["Today", "1w", "2w", "3w", "4w"]
-        scores = [88, 87, 85, 82, 81]
+        scores = [score, score-1, score-3, score-6, score-7]
 
     df = pd.DataFrame({'Week': days, 'Score': scores})
     fig = px.line(df, x='Week', y='Score', title='Trajectory', markers=True)
