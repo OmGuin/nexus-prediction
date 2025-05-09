@@ -142,7 +142,7 @@ with tab1:
         weight = st.number_input("Body Weight (lbs)", min_value=150.0, max_value=600.0, step=1.0)
     with col2:
         gender_label = st.selectbox("Gender", ["Male", "Female"])
-        height = st.number_input("Height (inches)", min_value=70.0, max_value=96.0, step=0.5)
+        height = st.number_input("Height (inches)", min_value=60.0, max_value=96.0, step=0.5)
 
     gender = 1 if gender_label == "Male" else 0
     bmi = (weight / (height * height)) * 703 if height > 0 else 0
