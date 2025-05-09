@@ -7,31 +7,6 @@ import base64
 from inference import calculate_irscore
 import plotly.express as px
 import pandas as pd
-from streamlit_lottie import st_lottie
-import requests
-import plotly.graph_objects as go
-
-def draw_plotly_gauge(score):
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=score,
-        domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "IRScore"},
-        gauge={
-            'axis': {'range': [0, 100]},
-            'bar': {'color': "#6c5ce7"},
-            'steps': [
-                {'range': [0, 50], 'color': "#ffeaa7"},
-                {'range': [50, 75], 'color': "#fdcb6e"},
-                {'range': [75, 100], 'color': "#00b894"}
-            ],
-        }
-    ))
-    return fig
-
-def load_lottieurl(url):
-    r = requests.get(url)
-    return r.json() if r.status_code == 200 else None
 
 st.set_page_config(page_title="NexFlow", layout="centered", page_icon="💡")
 
