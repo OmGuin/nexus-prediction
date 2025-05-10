@@ -105,12 +105,31 @@ if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
 if not st.session_state.logged_in:
-    st.markdown("<h1 style='text-align: center; color: #2d3436;'>NexFlow Login</h1>", unsafe_allow_html=True)
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    # Centered logo and welcome message
+    st.markdown("""
+        <div style='text-align: center; margin-bottom: 2em;'>
+            <img src='data:image/png;base64,{}' alt='NexFlow Logo' style='width: 420px; margin-bottom: 2em;'>
+            <h2 style='color: #2d3436; margin-bottom: 0;'>Welcome back</h2>
+            <p style='color: #636e72; font-size: 1.1em;'>Sign in to get started</p>
+        </div>
+    """.format(base64.b64encode(open("logo1.png", "rb").read()).decode()), unsafe_allow_html=True)
+
+    st.markdown("<label style='font-size: 1.15em; font-weight: 600;'>Username</label>", unsafe_allow_html=True)
+    username = st.text_input("", key="username_input", label_visibility="collapsed")
+
+    st.markdown("<label style='font-size: 1.15em; font-weight: 600;'>Password</label>", unsafe_allow_html=True)
+    password = st.text_input("", type="password", key="password_input", label_visibility="collapsed")
+
     if st.button("Login"):
         st.session_state.logged_in = True
         st.rerun()
+
+    st.markdown("""
+        <div style='text-align: center; margin-top: 1em;'>
+            <p style='font-size: 0.9em;'>Don't have an account? <a href='#' style='color: #6c5ce7; text-decoration: none;'>Sign up</a></p>
+        </div>
+    """, unsafe_allow_html=True)
+
     st.stop()
 
 # ------------------------ Tabs ------------------------ #
