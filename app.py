@@ -45,7 +45,7 @@ st.markdown(css, unsafe_allow_html=True)
 st.markdown("""
 <style>
 .fade-in-recs {
-animation: fadeInRecs 2s ease-out;
+animation: fadeInRecs 1s ease-out;
 opacity: 0;
 animation-fill-mode: forwards;
 }
