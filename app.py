@@ -45,7 +45,7 @@ st.markdown(css, unsafe_allow_html=True)
 st.markdown("""
 <style>
 .fade-in-recs {
-animation: fadeInRecs 1.2s ease-out;
+animation: fadeInRecs 10s ease-out;
 opacity: 0;
 animation-fill-mode: forwards;
 }
@@ -218,7 +218,7 @@ with tab2:
 # ------------------------ Recommendations Tab ------------------------ #
 with tab3:
     st.markdown("<h1 style='text-align: center; color: #2d3436;'>Recommendations</h1>", unsafe_allow_html=True)
-    st.write("Personalized pathways to lower your IRScore.")
+    st.write("Personalized pathways to increase your IRScore.")
 
     recs = [
         ("Sleep", "Increase duration by 1 hour", -4, "🌙"),
